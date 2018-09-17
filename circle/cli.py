@@ -10,28 +10,25 @@ def cli():
 
 
 @cli.command(help='edit question')
-@click.option('--list', '-l', is_flag=True, help='show question list')
-@click.option('--add', '-a', help='add question')
-@click.option('--delete', '-d', help='remove question')
-def question(list, add, delete):
-  if list:
+@click.argument('command', nargs=1)
+@click.argument('values', nargs=-1)
+def question(command, values):
+  if command == 'list':
     session = circle.session()
     questions = session.query(circle.Question).all()
     for q in questions:
       print(str(q))
-  elif add:
-    q = circle.Question(question=add)
+  elif command == 'add':
+    questions = [circle.Question(question=x) for x in values]
     session = circle.session()
-    session.add(q)
+    session.add_all(questions)
     session.commit()
-  elif delete:
+  elif command == 'delete':
     session = circle.session()
     session.query(circle.Question)\
-           .filter(circle.Question.id == delete)\
-           .delete()
+           .filter(circle.Question.id.in_(values))\
+           .delete(synchronize_session=False)
     session.commit()
-  else:
-    click.help
 
 
 @cli.command(help='circleの初期設定を行う')
