@@ -105,3 +105,6 @@ pyvenv.cfg
 
 # mypy
 .mypy_cache/
+
+# this project
+database.sqlite
