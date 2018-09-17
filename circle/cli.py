@@ -1,4 +1,7 @@
 import click
+import circle.database
+import circle.question
+
 
 @click.group(invoke_without_command=False)
 def cli():
@@ -18,3 +21,8 @@ def question(list, add, delete):
     click.echo('question deleted: ' + delete)
   else:
     click.help
+
+
+@cli.command(help='circleの初期設定を行う')
+def init():
+  circle.database.Base.metadata.create_all()
