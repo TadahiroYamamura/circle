@@ -9,4 +9,4 @@ class Question(Base):
   question = Column(String, nullable=False)
 
   def __str__(self):
-    return self.question
+    return '{}: {}'.format(self.id, self.question)
