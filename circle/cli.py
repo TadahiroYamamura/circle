@@ -1,8 +1,7 @@
 import os
 import os.path
 import click
-import circle.database
-import circle.question
+import circle
 
 
 @click.group(invoke_without_command=False)
@@ -11,11 +10,12 @@ def cli():
 
 
 @cli.command(help='edit question')
-@click.option('--list', is_flag=True, help='show question list')
+@click.option('--list', '-l', is_flag=True, help='show question list')
 @click.option('--add', '-a', help='add question')
 @click.option('--delete', '-d', help='remove question')
 def question(list, add, delete):
   if list:
+<<<<<<< HEAD
     session = circle.database.session()
     questions = session.query(circle.question.Question).all()
     for q in questions:
@@ -33,6 +33,23 @@ def question(list, add, delete):
     if q:
       session.delete(q)
       session.commit()
+=======
+    session = circle.session()
+    questions = session.query(circle.Question).all()
+    for q in questions:
+      print(str(q))
+  elif add:
+    q = circle.Question(question=add)
+    session = circle.session()
+    session.add(q)
+    session.commit()
+  elif delete:
+    session = circle.session()
+    session.query(circle.Question)\
+           .filter(circle.Question.id == delete)\
+           .delete()
+    session.commit()
+>>>>>>> master
   else:
     click.help
 
