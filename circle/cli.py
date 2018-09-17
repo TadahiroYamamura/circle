@@ -1,3 +1,5 @@
+import os
+import os.path
 import click
 import circle.database
 import circle.question
@@ -25,4 +27,6 @@ def question(list, add, delete):
 
 @cli.command(help='circleの初期設定を行う')
 def init():
+  # データベースが存在した場合に削除
+  if os.path.exists('database.sqlite'): os.remove('database.sqlite')
   circle.database.Base.metadata.create_all()
