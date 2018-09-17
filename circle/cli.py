@@ -16,11 +16,23 @@ def cli():
 @click.option('--delete', '-d', help='remove question')
 def question(list, add, delete):
   if list:
-    click.echo('list questions.')
+    session = circle.database.session()
+    questions = session.query(circle.question.Question).all()
+    for q in questions:
+      print(str(q))
   elif add:
-    click.echo('question added: ' + add)
+    q = circle.question.Question(question=add)
+    session = circle.database.session()
+    session.add(q)
+    session.commit()
   elif delete:
-    click.echo('question deleted: ' + delete)
+    session = circle.database.session()
+    q = session.query(circle.question.Question)\
+               .filter(circle.question.Question.id == delete)\
+               .first()
+    if q:
+      session.delete(q)
+      session.commit()
   else:
     click.help
 
